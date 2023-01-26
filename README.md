@@ -1,2 +1,5 @@
-# Portfolio
-Meu portfólio, desenvolvido com Python, Flask, HTML, Css e JS
+Download fonts:
+https://fonts.google.com/specimen/Ubuntu?query=ubun
+
+Barra vertical:
+https://getbootstrap.com/docs/5.3/components/navs-tabs/
