@@ -59,4 +59,4 @@ def send():
 
 
 if __name__ == '__main__':
-    app.run('localhost', 4449, debug=True)
+    app.run('localhost', 4449)
