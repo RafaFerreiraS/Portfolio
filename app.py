@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, request, flash
 from flask_mail import Mail, Message
 from dotenv import load_dotenv
+from chat import resposta_chat_gpt
 import os
 
 
@@ -26,6 +27,25 @@ class Contato:
         self.nome = nome
         self.email = email
         self.mensagem = mensagem
+
+
+def enviar_email_ia(nome, email, pergunta, msg):
+    msg = Message(
+        subject=f'{nome} enviou uma mensagem no Portfólio',
+        sender=app.config.get("MAIL_USERNAME"),
+        recipients=[email],
+        body=f'''
+                Pergunta feita para a IA: {pergunta}
+
+                {msg}
+                '''
+    )
+
+    mail.send(msg)
+
+class IA:
+    def __init__(self, pergunta):
+        self.pergunta = pergunta
 
 
 @app.route('/')
@@ -54,9 +74,19 @@ def send():
         )
 
         mail.send(msg)
-        flash('Mensagem enviada com sucesso!')
+        flash('Mensagem enviada com sucesso!', 'sucess')
+    return redirect('/')
+
+
+@app.route('/chat', methods=['GET', 'POST'])
+def chat():
+    if request.method == 'POST':
+        formIA = IA(request.form["pergunta"])
+        mensagem_output = resposta_chat_gpt(formIA.pergunta)
+        flash(f'{mensagem_output}', 'answer')
+        enviar_email_ia('IA', 'ia@teste.com', formIA.pergunta, mensagem_output)
     return redirect('/')
 
 
 if __name__ == '__main__':
-    app.run('localhost', 4449)
+    app.run('localhost', 4449, debug=True)

@@ -55,11 +55,16 @@
                   <a class="nav-link" href="#contato">
                       <i class = "bi bi-envelope" aria-hidden="true"></i> Contato</a>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#perguntas">
+                      <i class = "bi bi-question-circle" aria-hidden="true"></i> Interação AGI-ML</a>
+                </li>
             </ul>
         </nav>
     </aside>
 
     <main id="main">
+
         <section id="inicio" class="row m-0 p-0">
             <div class="col-md-5 d-flex justify-content-center align items-center flex-column">
                 <h2 class="text-white text-shadow">Rafael Ferreira</h2>
@@ -463,10 +468,9 @@
                                 <div class="col-12 d-flex justify-content-center mt-4">
                                     <button id="btn-enviar" type="submit" class="btn btn-outline-primary">Enviar mensagem</button>
                                     <button id="btn-enviar-load" class="btn btn-primary" type="button" disabled>
-                                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>Enviando...</button>
+                                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>Enviando...</button>
                                 </div>
                             </form>
-
                         </div>
                     </div>
                 </div>
@@ -474,12 +478,54 @@
             </div>
         </section>
 
-        {% with messages = get_flashed_messages() %}
+        <section id ="perguntas" class="mt-5 section-bg" >
+            <div class="container pb-5">
+				<h2 class="pt-3 pb-2" data-anime="left">Faça QUALQUER interação e se surpreenda com a resposta 🤭</h2>
+                <div class="row">
+                    <div class="col-md-12 mt-5 mt-md-0" data-anime="up">
+                        <div class="card p-5 h-100 shadow border-0">
+                            <form class="row g-3" action="/chat" method="POST">
+                                <div class="col-md-12">
+                                    <label for="pergunta" class="form-label">Pergunta: </label>
+                                    <input type="text" class="form-control" placeholder="Digite sua pergunta" id="pergunta" name="pergunta" required>
+                                </div>
+                                <div class="col-12 d-flex justify-content-center mt-4">
+                                    <button id="btn-enviar-pergunta" type="submit" class="btn btn-outline-primary">Enviar pergunta</button>
+                                    <button id="btn-enviar-load-pergunta" class="btn btn-primary" type="button" disabled>
+                                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>Aguarde...</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+			</div>
+
+		</section>
+
+
+        {% with messages = get_flashed_messages(category_filter=["sucess"]) %}
             {% if messages %}
                 {% for message in messages %}
                     <div id="alerta" class="alert alert-success alert-dismissible fade show" role="alert">
                         <i class="bi bi-check-circle-fill"></i> {{ message }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% with messages = get_flashed_messages(category_filter=["answer"]) %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div id="alerta_resposta" class="alert alert-info alert-dismissible fade show" role="alert">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <h4 class="alert-heading">Resposta:</h4>
+                        <p class="mb-0"></p>
+                        <p>{{ message }}</p>
+                        <hr>
+                        <p class="mb-0">Gostou? Envie um FeedBack na aba Contato 😊 </p>
+                        <p class="mb-0">By - AshengS</p>
                     </div>
                 {% endfor %}
             {% endif %}

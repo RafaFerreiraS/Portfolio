@@ -51,3 +51,12 @@ btnEnviar.addEventListener("click", () => {
 setTimeout(() => {
     document.querySelector('#alerta').style.display = 'none';
 }, 5000)
+
+
+const btnEnviarPergunta = document.querySelector('#btn-enviar-pergunta')
+const btnEnviarLoadPergunta = document.querySelector('#btn-enviar-load-pergunta')
+
+btnEnviarPergunta.addEventListener("click", () => {
+    btnEnviarLoadPergunta.style.display = "block";
+    btnEnviarPergunta.style.display = "none";
+})

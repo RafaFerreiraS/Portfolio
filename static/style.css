@@ -272,9 +272,20 @@ i.menu-mobile {
     display: none;
 }
 
+#btn-enviar-load-pergunta {
+    display: none;
+}
+
 #alerta {
     position: fixed;
     z-index: 10;
+    top: 30px;
+    right: 30px;
+}
+
+#alerta_resposta {
+    position: fixed;
+    z-index: 9999;
     top: 30px;
     right: 30px;
 }
