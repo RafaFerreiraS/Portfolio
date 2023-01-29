@@ -1,13 +1,13 @@
 from flask import Flask, render_template, redirect, request, flash
 from flask_mail import Mail, Message
 from dotenv import load_dotenv
-from chat import resposta_chat_gpt
+import openai
 import os
-
 
 load_dotenv()
 app = Flask(__name__)
 app.secret_key = '147258369'
+openai.api_key = os.getenv('CHAVE')
 
 mail_settings = {
     "MAIL_SERVER": 'smtp.gmail.com',
@@ -42,6 +42,18 @@ def enviar_email_ia(nome, email, pergunta, msg):
     )
 
     mail.send(msg)
+
+
+def resposta_chat_gpt(pergunta: str) -> str:
+
+    response = openai.Completion.create(
+        engine="text-davinci-002",
+        prompt=pergunta,
+        max_tokens=1024
+    )
+    resultado = response["choices"][0]["text"].replace("\n", " ")
+    return resultado
+
 
 class IA:
     def __init__(self, pergunta):
