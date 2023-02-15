@@ -1,11 +1,13 @@
 from flask import Flask, render_template, redirect, request, flash
 from flask_mail import Mail, Message
 from dotenv import load_dotenv
+from redis import Redis
 import openai
 import os
 
 load_dotenv()
 app = Flask(__name__)
+redis = Redis(host='localhost', port=6379)
 app.secret_key = '147258369'
 openai.api_key = os.getenv('CHAVE')
 
@@ -45,7 +47,6 @@ def enviar_email_ia(nome, email, pergunta, msg):
 
 
 def resposta_chat_gpt(pergunta: str) -> str:
-
     response = openai.Completion.create(
         engine="text-davinci-002",
         prompt=pergunta,
@@ -62,8 +63,13 @@ class IA:
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    redis.incr('visitas')
+    return render_template('index.html', visitas=str(int(redis.get('visitas'))))
 
+
+@app.route('/visitas')
+def visitas():
+    return redis.get('visitas')
 
 @app.route('/send', methods=['GET', 'POST'])
 def send():
@@ -80,7 +86,7 @@ def send():
             recipients=['rafael.ferreira.s@hotmail.com.br', app.config.get("MAIL_USERNAME")],
             body=f'''
             {formContato.nome} com o email {formContato.email}, te enviou a seguinte mensagem:
-            
+
             {formContato.mensagem}
             '''
         )
