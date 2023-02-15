@@ -1,13 +1,15 @@
 from flask import Flask, render_template, redirect, request, flash
 from flask_mail import Mail, Message
 from dotenv import load_dotenv
-from redis import Redis
+import redis
 import openai
 import os
 
 load_dotenv()
 app = Flask(__name__)
-redis = Redis(host='localhost', port=6379)
+
+redis_url = os.getenv('REDISCLOUD_URL', 'redis://localhost:6379')
+conn = redis.from_url(redis_url)
 app.secret_key = '147258369'
 openai.api_key = os.getenv('CHAVE')
 
@@ -63,13 +65,14 @@ class IA:
 
 @app.route('/')
 def index():
-    redis.incr('visitas')
-    return render_template('index.html', visitas=str(int(redis.get('visitas'))))
+    conn.incr('visitas')
+    return render_template('index.html', visitas=str(int(conn.get('visitas'))))
 
 
 @app.route('/visitas')
 def visitas():
-    return redis.get('visitas')
+    return conn.get('visitas')
+
 
 @app.route('/send', methods=['GET', 'POST'])
 def send():
