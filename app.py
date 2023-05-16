@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import redis
 import openai
 import os
+from flask import send_file
 
 load_dotenv()
 app = Flask(__name__)
@@ -99,15 +100,17 @@ def send():
     return redirect('/')
 
 
-@app.route('/chat', methods=['GET', 'POST'])
+@app.route('/download', methods=['GET', 'POST'])
 def chat():
-    if request.method == 'POST':
+    file = 'static/pdf/cv.pdf'
+    return send_file(file, as_attachment=True)
+    '''//if request.method == 'POST':
         formIA = IA(request.form["pergunta"])
         mensagem_output = resposta_chat_gpt(formIA.pergunta)
         flash(f'{mensagem_output}', 'answer')
-        enviar_email_ia('IA', 'ia@teste.com', formIA.pergunta, mensagem_output)
+        enviar_email_ia('IA', 'ia@teste.com', formIA.pergunta, mensagem_output)'''
     return redirect('/')
 
 
 if __name__ == '__main__':
-    app.run('localhost', 4449)
+    app.run('localhost', 4449, debug=True)
