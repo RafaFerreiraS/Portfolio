@@ -103,7 +103,7 @@ def send():
 @app.route('/download', methods=['GET', 'POST'])
 def chat():
     file = 'static/pdf/cv.pdf'
-    return send_file(file, as_attachment=True)
+    send_file(file, as_attachment=True)
     '''//if request.method == 'POST':
         formIA = IA(request.form["pergunta"])
         mensagem_output = resposta_chat_gpt(formIA.pergunta)
