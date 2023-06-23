@@ -103,14 +103,14 @@ def send():
 @app.route('/download', methods=['GET', 'POST'])
 def chat():
     file = 'static/pdf/cv.pdf'
-    send_file(file, as_attachment=True)
+
     '''//if request.method == 'POST':
         formIA = IA(request.form["pergunta"])
         mensagem_output = resposta_chat_gpt(formIA.pergunta)
         flash(f'{mensagem_output}', 'answer')
         enviar_email_ia('IA', 'ia@teste.com', formIA.pergunta, mensagem_output)'''
-    return redirect('/')
+    return send_file(file, as_attachment=True)
 
 
 if __name__ == '__main__':
-    app.run('localhost', 4449, debug=True)
+    app.run('localhost', 4449)
